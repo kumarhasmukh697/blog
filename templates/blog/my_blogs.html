@@ -6,60 +6,28 @@
     <h3 class="text-center"><i class="fa-solid fa-circle-user" style="color: #00040a;"></i>{{user}} Dashboard</h3>
     <br><br>
     <div class="row">
+        {% for post in posts %}
         <div class="col-sm-3">
             <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <img class="card-img-top" src="{% static 'images/python-image.png' %}" alt="Card image cap">
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <h5 class="card-title">{{ post.title }}</h5>
+                {% if post.image %}
+                <img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap">
+                {% else %}
+                <img class="card-img-top" src="{% static 'image/python.png' %}" alt="Card image">
+                {% endif %}
+                <p class="card-text">{{ post.content }}</p>
+                <p><strong>Author : </strong>{{ post.author }}</p>
+                <p><strong>Created On : </strong>{{ post.created_at }}</p>
+                <a href="{% url 'read_post' post.id %}" class="btn btn-primary">Read</a>
+                {% if user == post.author %}
+                <a href="{% url 'update_post' post.id %}" class="btn btn-secondary">Update</a>
+                <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
+                {% endif %}
             </div>
             </div>
         </div>
-
-        <div class="col-sm-3">
-            <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <img class="card-img-top" src="{% static 'images/python-image.png' %}" alt="Card image cap">
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <img class="card-img-top" src="{% static 'images/python-image.png' %}" alt="Card image cap">
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <img class="card-img-top" src="{% static 'images/python-image.png' %}" alt="Card image cap">
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <img class="card-img-top" src="{% static 'images/python-image.png' %}" alt="Card image cap">
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
     <br><br><br>
 {% endblock %}

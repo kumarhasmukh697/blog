@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<br>
+<h3 class="text-center"><i class="fa-solid fa-circle-user" style="color: #00040a;"></i>{{user}} Dashboard</h3>
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>{{ post.title }}</h4>
+                </div>
+                <div class="card-body">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" class="img-fluid mb-3" alt="Blog Image">
+                    {% else %}
+                        <img src="{% static 'image/python.png' %}" class="img-fluid mb-3" alt="Default Image">
+                    {% endif %}
+                    <p>{{ post.content }}</p>
+                    <p><strong>Author:</strong> {{ post.author }}</p>
+                    <p><strong>Created On:</strong> {{ post.created_at }}</p>
+                </div>
+            </div>
+            <br><br>
+            <h4>Comments : <i class="fa-solid fa-comment"></i></h4>
+            <h4>Like : <i class="fa-sharp fa-regular fa-heart" style="color: #f90133;"></i></h4>
+            <h4>Ratings : <i class="fa-regular fa-star" style="color: #FFD43B;"></i><i class="fa-regular fa-star" style="color: #FFD43B;"></i><i class="fa-regular fa-star" style="color: #FFD43B;"></i><i class="fa-regular fa-star" style="color: #FFD43B;"></i><i class="fa-regular fa-star" style="color: #FFD43B;"></i></h4>
+        </div>
+    </div>
+</div>
+<br><br>
+{% endblock%}
