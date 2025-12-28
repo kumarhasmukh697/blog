@@ -117,3 +117,10 @@
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
 }
+
+/* Single-line truncation for post excerpts */
+.single-line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

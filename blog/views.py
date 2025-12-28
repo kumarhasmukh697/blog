@@ -1,9 +1,10 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
-from .models import Post
+from .models import Post,Comment,CommentLikes
 
 # Create your views here.
 
@@ -97,9 +98,47 @@ def delete_post(request, post_id):
 
 
 def read_post(request, post_id):
-    post = Post.objects.get(id=post_id)
-    context = {'post': post}
+    post = get_object_or_404(Post, id=post_id)
+    liked = False
+    if request.user.is_authenticated:
+        liked = CommentLikes.objects.filter(user=request.user, post=post).exists()
+    context = {'post': post, 'user': request.user, 'liked': liked}
     return render(request, 'blog/read.html', context)
+
+
+
+@login_required
+def toggle_like(request, post_id):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=400)
+    post = get_object_or_404(Post, id=post_id)
+    like_obj = CommentLikes.objects.filter(user=request.user, post=post).first()
+    if like_obj:
+        # unlike
+        like_obj.delete()
+        if post.likes > 0:
+            post.likes -= 1
+            post.save()
+        liked = False
+    else:
+        # like
+        CommentLikes.objects.create(user=request.user, post=post)
+        post.likes += 1
+        post.save()
+        liked = True
+    return JsonResponse({'liked': liked, 'likes_count': post.likes})
+
+
+
+@login_required
+def add_comment(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        comment_text = request.POST.get('comment', '').strip()
+        if comment_text:
+            Comment.objects.create(user=request.user, post=post, comment=comment_text)
+    return redirect('read_post', post_id=post_id)    
+   
     
    
 

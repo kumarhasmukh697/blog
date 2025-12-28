@@ -16,7 +16,7 @@
                 {% else %}
                 <img class="card-img-top" src="{% static 'image/python.png' %}" alt="Card image">
                 {% endif %}
-                <p class="card-text">{{ post.content }}</p>
+                <p class="card-text single-line">{{ post.content|truncatewords:10 }}</p>
                 <p><strong>Author : </strong>{{ post.author }}</p>
                 <p><strong>Created On : </strong>{{ post.created_at }}</p>
                 <a href="{% url 'read_post' post.id %}" class="btn btn-primary">Read</a>
