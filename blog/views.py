@@ -5,6 +5,7 @@ from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from .models import Post,Comment,CommentLikes
+from django.db.models import Q
 
 # Create your views here.
 
@@ -109,6 +110,7 @@ def read_post(request, post_id):
 
 @login_required
 def toggle_like(request, post_id):
+    print("Toggle like called")
     if request.method != 'POST':
         return JsonResponse({'error': 'POST required'}, status=400)
     post = get_object_or_404(Post, id=post_id)
@@ -137,7 +139,27 @@ def add_comment(request, post_id):
         comment_text = request.POST.get('comment', '').strip()
         if comment_text:
             Comment.objects.create(user=request.user, post=post, comment=comment_text)
-    return redirect('read_post', post_id=post_id)    
+    return redirect('read_post', post_id=post_id)   
+
+
+def show_comments(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(post=post)
+    context = {'post': post, 'comments': comments}
+    return render(request, 'blog/read.html', context)
+
+
+
+def search(request):
+    if request.method == 'POST':
+        search_query = request.POST.get('search', '').strip()
+
+        # fetch Post according to titile,author or created_at 
+        posts = Post.objects.filter(Q(title__icontains=search_query) | Q(author__username__icontains=search_query) | Q(created_at__icontains=search_query)).distinct()
+        context = {'posts': posts}
+        return render(request, 'blog/my_blogs.html', context)
+    
+    return render(request,'blog/my_blogs.html')
    
     
    

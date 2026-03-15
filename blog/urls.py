@@ -13,5 +13,7 @@ urlpatterns = [
     path('read_post/<int:post_id>/', views.read_post, name='read_post'),
     path('add_comment/<int:post_id>/', views.add_comment, name='add_comment'),
     path('toggle_like/<int:post_id>/', views.toggle_like, name='toggle_like'),
+    path('show_comments/<int:post_id>/', views.show_comments, name='show_comments'),
+    path('search/', views.search, name='search'),
 ]
 

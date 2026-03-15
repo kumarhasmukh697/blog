@@ -40,7 +40,24 @@
                 <button type="submit" class="btn btn-dark mt-2">Submit</button>
                </div>
             </form>
+            <br><br>
+            <a href="{% url 'show_comments' post.id %}"><button class="btn btn-primary">View Comments</button></a><br>
             <br>
+             {% url 'show_comments' post.id as show_comments_url %}
+            {% if request.path == show_comments_url %}
+            <div class="comments-section">
+                <h4>Comments:</h4>
+                {% for comment in comments %}
+                    <div class="comment mb-3 p-2 border">
+                        <p><strong>{{ comment.user.username }}</strong> says:</p>
+                        <p>{{ comment.comment }}</p>
+                        <!-- <p class="text-right"><small>Posted on {{ comment.created_at }}</small></p> -->
+                    </div>
+                {% empty %}
+                    <p>No comments yet. Be the first to comment!</p>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -67,6 +84,7 @@ const likeBtn = document.getElementById('like-btn');
 const likeCountEl = document.getElementById('like-count');
 const toggleUrl = "{% url 'toggle_like' post.id %}";
 const csrftoken = getCookie('csrftoken');
+
 
 likeBtn && likeBtn.addEventListener('click', function() {
     fetch(toggleUrl, {
