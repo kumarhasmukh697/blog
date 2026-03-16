@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-default-for-local")
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
